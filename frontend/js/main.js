@@ -188,12 +188,70 @@ async function fetchDeveloperProfile() {
       el.setAttribute('target', '_blank');
     });
 
+    // Populate Email
+    const emailLinks = document.querySelectorAll('.dev-email');
+    emailLinks.forEach(el => {
+      if (profile.email) {
+        el.href = `mailto:${profile.email}`;
+        el.textContent = profile.email;
+        el.style.display = '';
+        const parentCard = el.closest('.contact-info-card');
+        if (parentCard) parentCard.style.display = '';
+      } else {
+        if (el.classList.contains('social-icon')) {
+          el.style.display = 'none';
+        } else {
+          const parentCard = el.closest('.contact-info-card');
+          if (parentCard) parentCard.style.display = 'none';
+          else el.style.display = 'none';
+        }
+      }
+    });
+
     // Populate Social profiles
     const githubLinks = document.querySelectorAll('.dev-github');
-    githubLinks.forEach(el => el.href = profile.githubUrl);
+    const cleanGithub = profile.githubUrl ? profile.githubUrl.replace(/https?:\/\/(www\.)?github\.com\//i, '').replace(/\/$/, '') : '';
+    githubLinks.forEach(el => {
+      if (profile.githubUrl) {
+        el.href = profile.githubUrl;
+        if (!el.classList.contains('social-icon')) {
+          el.textContent = cleanGithub ? `github.com/${cleanGithub}` : 'GitHub';
+        }
+        el.style.display = '';
+        const parentCard = el.closest('.contact-info-card');
+        if (parentCard) parentCard.style.display = '';
+      } else {
+        if (el.classList.contains('social-icon')) {
+          el.style.display = 'none';
+        } else {
+          const parentCard = el.closest('.contact-info-card');
+          if (parentCard) parentCard.style.display = 'none';
+          else el.style.display = 'none';
+        }
+      }
+    });
 
     const linkedinLinks = document.querySelectorAll('.dev-linkedin');
-    linkedinLinks.forEach(el => el.href = profile.linkedinUrl);
+    const cleanLinkedIn = profile.linkedinUrl ? profile.linkedinUrl.replace(/https?:\/\/(www\.)?linkedin\.com\/in\//i, '').replace(/\/$/, '') : '';
+    linkedinLinks.forEach(el => {
+      if (profile.linkedinUrl) {
+        el.href = profile.linkedinUrl;
+        if (!el.classList.contains('social-icon')) {
+          el.textContent = cleanLinkedIn ? `linkedin.com/in/${cleanLinkedIn}` : 'LinkedIn';
+        }
+        el.style.display = '';
+        const parentCard = el.closest('.contact-info-card');
+        if (parentCard) parentCard.style.display = '';
+      } else {
+        if (el.classList.contains('social-icon')) {
+          el.style.display = 'none';
+        } else {
+          const parentCard = el.closest('.contact-info-card');
+          if (parentCard) parentCard.style.display = 'none';
+          else el.style.display = 'none';
+        }
+      }
+    });
 
     // Dynamic WhatsApp floating button injection & linkage
     const whatsappLinks = document.querySelectorAll('.dev-whatsapp');
@@ -203,7 +261,12 @@ async function fetchDeveloperProfile() {
       
       whatsappLinks.forEach(el => {
         el.href = waUrl;
-        el.style.display = 'inline-flex';
+        el.style.display = '';
+        if (!el.classList.contains('social-icon') && !el.classList.contains('whatsapp-float')) {
+          el.textContent = `+${cleanNum}`;
+        }
+        const parentCard = el.closest('.contact-info-card');
+        if (parentCard) parentCard.style.display = '';
       });
 
       // Inject floating WhatsApp button dynamically to body if not already present
@@ -217,10 +280,19 @@ async function fetchDeveloperProfile() {
         document.body.appendChild(floatBtn);
       }
       floatBtn.href = waUrl;
+      floatBtn.style.display = '';
     } else {
-      whatsappLinks.forEach(el => el.style.display = 'none');
+      whatsappLinks.forEach(el => {
+        if (el.classList.contains('social-icon')) {
+          el.style.display = 'none';
+        } else {
+          const parentCard = el.closest('.contact-info-card');
+          if (parentCard) parentCard.style.display = 'none';
+          else el.style.display = 'none';
+        }
+      });
       const floatBtn = document.getElementById('whatsapp-float-widget');
-      if (floatBtn) floatBtn.remove();
+      if (floatBtn) floatBtn.style.display = 'none';
     }
 
     // Save developer settings in window object
