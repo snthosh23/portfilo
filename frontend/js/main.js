@@ -133,7 +133,15 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast-notification toast-${type}`;
-  toast.innerHTML = message;
+  
+  let iconHtml = '<i class="fas fa-info-circle"></i>';
+  if (type === 'success') {
+    iconHtml = '<i class="fas fa-check-circle"></i>';
+  } else if (type === 'error') {
+    iconHtml = '<i class="fas fa-exclamation-circle"></i>';
+  }
+
+  toast.innerHTML = `${iconHtml}<span>${message}</span>`;
   toastContainer.appendChild(toast);
 
   // Force reflow
@@ -145,7 +153,7 @@ function showToast(message, type = 'success') {
     toast.classList.remove('show');
     setTimeout(() => {
       toast.remove();
-    }, 300);
+    }, 350);
   }, 4000);
 }
 
@@ -271,18 +279,138 @@ function initializeContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
+  const nameInput = document.getElementById('form-name');
+  const emailInput = document.getElementById('form-email');
+  const subjectInput = document.getElementById('form-subject');
+  const messageInput = document.getElementById('form-message');
+  const charCount = document.getElementById('char-count');
+
+  // Character Counter for Message Textarea
+  if (messageInput && charCount) {
+    messageInput.addEventListener('input', () => {
+      charCount.textContent = messageInput.value.length;
+    });
+  }
+
+  const validators = {
+    name: () => {
+      const val = nameInput.value.trim();
+      const errEl = document.getElementById('name-error');
+      if (val.length === 0) {
+        showInputStatus(nameInput, errEl, 'Full name is required.', false);
+        return false;
+      } else if (val.length < 3) {
+        showInputStatus(nameInput, errEl, 'Name must be at least 3 characters.', false);
+        return false;
+      } else if (val.length > 50) {
+        showInputStatus(nameInput, errEl, 'Name cannot exceed 50 characters.', false);
+        return false;
+      }
+      showInputStatus(nameInput, errEl, '', true);
+      return true;
+    },
+    email: () => {
+      const val = emailInput.value.trim();
+      const errEl = document.getElementById('email-error');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (val.length === 0) {
+        showInputStatus(emailInput, errEl, 'Email address is required.', false);
+        return false;
+      } else if (!emailRegex.test(val)) {
+        showInputStatus(emailInput, errEl, 'Please enter a valid email address.', false);
+        return false;
+      }
+      showInputStatus(emailInput, errEl, '', true);
+      return true;
+    },
+    subject: () => {
+      const val = subjectInput.value.trim();
+      const errEl = document.getElementById('subject-error');
+      if (val.length === 0) {
+        showInputStatus(subjectInput, errEl, 'Subject is required.', false);
+        return false;
+      } else if (val.length < 5) {
+        showInputStatus(subjectInput, errEl, 'Subject must be at least 5 characters.', false);
+        return false;
+      } else if (val.length > 100) {
+        showInputStatus(subjectInput, errEl, 'Subject cannot exceed 100 characters.', false);
+        return false;
+      }
+      showInputStatus(subjectInput, errEl, '', true);
+      return true;
+    },
+    message: () => {
+      const val = messageInput.value.trim();
+      const errEl = document.getElementById('message-error');
+      if (val.length === 0) {
+        showInputStatus(messageInput, errEl, 'Message is required.', false);
+        return false;
+      } else if (val.length < 10) {
+        showInputStatus(messageInput, errEl, 'Message must be at least 10 characters.', false);
+        return false;
+      } else if (val.length > 1000) {
+        showInputStatus(messageInput, errEl, 'Message cannot exceed 1000 characters.', false);
+        return false;
+      }
+      showInputStatus(messageInput, errEl, '', true);
+      return true;
+    }
+  };
+
+  function showInputStatus(inputEl, errorEl, message, isValid) {
+    if (isValid) {
+      inputEl.classList.remove('is-invalid');
+      inputEl.classList.add('is-valid');
+      if (errorEl) errorEl.textContent = '';
+    } else {
+      inputEl.classList.remove('is-valid');
+      inputEl.classList.add('is-invalid');
+      if (errorEl) errorEl.textContent = message;
+    }
+  }
+
+  // Bind validation listeners (input, blur)
+  if (nameInput) {
+    nameInput.addEventListener('input', validators.name);
+    nameInput.addEventListener('blur', validators.name);
+  }
+  if (emailInput) {
+    emailInput.addEventListener('input', validators.email);
+    emailInput.addEventListener('blur', validators.email);
+  }
+  if (subjectInput) {
+    subjectInput.addEventListener('input', validators.subject);
+    subjectInput.addEventListener('blur', validators.subject);
+  }
+  if (messageInput) {
+    messageInput.addEventListener('input', validators.message);
+    messageInput.addEventListener('blur', validators.message);
+  }
+
+  // Handle Form Submission
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById('form-name').value.trim();
-    const email = document.getElementById('form-email').value.trim();
-    const subject = document.getElementById('form-subject').value.trim();
-    const message = document.getElementById('form-message').value.trim();
+    // Run all validations
+    const isNameValid = validators.name();
+    const isEmailValid = validators.email();
+    const isSubjectValid = validators.subject();
+    const isMessageValid = validators.message();
 
-    if (!name || !email || !subject || !message) {
-      showToast('All form fields are required!', 'error');
+    if (!isNameValid || !isEmailValid || !isSubjectValid || !isMessageValid) {
+      showToast('Please correct the errors before sending.', 'error');
+      // Focus first invalid element
+      if (!isNameValid) nameInput.focus();
+      else if (!isEmailValid) emailInput.focus();
+      else if (!isSubjectValid) subjectInput.focus();
+      else if (!isMessageValid) messageInput.focus();
       return;
     }
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const subject = subjectInput.value.trim();
+    const message = messageInput.value.trim();
 
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
@@ -303,6 +431,12 @@ function initializeContactForm() {
       if (res.ok) {
         showToast('Your message has been sent successfully!', 'success');
         form.reset();
+        
+        // Reset classes
+        [nameInput, emailInput, subjectInput, messageInput].forEach(el => {
+          el.classList.remove('is-valid', 'is-invalid');
+        });
+        if (charCount) charCount.textContent = '0';
       } else {
         showToast(data.message || 'Failed to send message.', 'error');
       }
