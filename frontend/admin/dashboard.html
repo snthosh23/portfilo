@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Manage Portfolio</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation Drawer -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/" class="sidebar-logo">
+        <i class="fas fa-user-shield"></i> <span>Admin Portal</span>
+      </a>
+      
+      <ul class="sidebar-menu">
+        <li>
+          <a class="sidebar-link active" data-tab="overview">
+            <i class="fas fa-chart-pie"></i> Overview
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-tab="projects">
+            <i class="fas fa-briefcase"></i> Websites
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-tab="certificates">
+            <i class="fas fa-certificate"></i> Certificates
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-tab="achievements">
+            <i class="fas fa-award"></i> Achievements
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-tab="profile">
+            <i class="fas fa-user-cog"></i> Profile Settings
+          </a>
+        </li>
+        <li>
+          <a class="sidebar-link" data-tab="inbox">
+            <i class="fas fa-envelope-open-text"></i> Inbox
+            <span id="unread-count" style="margin-left:auto; background:#EF4444; color:white; font-size:11px; padding:2px 6px; border-radius:10px; display:none;">0</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div style="display:flex; justify-content:center; margin-bottom:20px;">
+          <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+        <a class="sidebar-link" id="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="dash-content">
+      <div class="dash-header">
+        <div>
+          <h1 id="tab-title">Dashboard Overview</h1>
+          <p style="color: var(--text-secondary); margin-top: 4px;">Welcome back, Administrator</p>
+        </div>
+        <div class="dash-actions-top">
+          <a href="/" class="btn btn-secondary btn-sm" target="_blank">
+            <i class="fas fa-external-link-alt"></i> View Website
+          </a>
+          <button class="hamburger" id="dash-hamburger" style="display:none;" aria-label="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. OVERVIEW TAB PANEL -->
+      <section class="dash-tab-panel active" id="panel-overview">
+        <div class="dash-overview-grid">
+          <!-- Visitors Count Card -->
+          <div class="glass-card dash-stat-card">
+            <div class="dash-stat-icon"><i class="fas fa-eye"></i></div>
+            <div class="dash-stat-info">
+              <h3>Web Visitors</h3>
+              <div class="dash-stat-number" id="overview-visitors-count">0</div>
+            </div>
+          </div>
+          <!-- Projects Count Card -->
+          <div class="glass-card dash-stat-card">
+            <div class="dash-stat-icon"><i class="fas fa-briefcase"></i></div>
+            <div class="dash-stat-info">
+              <h3>Websites</h3>
+              <div class="dash-stat-number" id="overview-projects-count">0</div>
+            </div>
+          </div>
+          <!-- Certificates Count Card -->
+          <div class="glass-card dash-stat-card">
+            <div class="dash-stat-icon"><i class="fas fa-certificate"></i></div>
+            <div class="dash-stat-info">
+              <h3>Certifications</h3>
+              <div class="dash-stat-number" id="overview-certs-count">0</div>
+            </div>
+          </div>
+          <!-- Achievements Count Card -->
+          <div class="glass-card dash-stat-card">
+            <div class="dash-stat-icon"><i class="fas fa-award"></i></div>
+            <div class="dash-stat-info">
+              <h3>Achievements</h3>
+              <div class="dash-stat-number" id="overview-achievements-count">0</div>
+            </div>
+          </div>
+          <!-- Inbox Messages Count Card -->
+          <div class="glass-card dash-stat-card">
+            <div class="dash-stat-icon"><i class="fas fa-envelope"></i></div>
+            <div class="dash-stat-info">
+              <h3>Messages</h3>
+              <div class="dash-stat-number" id="overview-messages-count">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Dashboard Section -->
+        <div class="dash-charts-grid">
+          <div class="glass-card chart-card">
+            <h3 style="font-size:16px;"><i class="fas fa-chart-line" style="color:var(--primary-blue); margin-right:8px;"></i> Traffic & Messages Analytics</h3>
+            <div class="chart-container">
+              <canvas id="visitorChart"></canvas>
+            </div>
+          </div>
+          <div class="glass-card chart-card">
+            <h3 style="font-size:16px;"><i class="fas fa-chart-pie" style="color:#8B5CF6; margin-right:8px;"></i> Websites by Category</h3>
+            <div class="chart-container">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="padding:32px;">
+          <h3 style="margin-bottom:16px;">Quick Actions</h3>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="openAddModal('project')">
+              <i class="fas fa-plus"></i> Add Website
+            </button>
+            <button class="btn btn-secondary" onclick="openAddModal('certificate')">
+              <i class="fas fa-plus"></i> Add Certificate
+            </button>
+            <button class="btn btn-secondary" onclick="openAddModal('achievement')">
+              <i class="fas fa-plus"></i> Add Achievement
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. PROJECTS TAB PANEL -->
+      <section class="dash-tab-panel" id="panel-projects">
+        <div class="dash-card-header">
+          <h2>Manage Websites</h2>
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div class="search-bar-wrapper">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-projects" class="search-control" placeholder="Search websites...">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddModal('project')">
+              <i class="fas fa-plus"></i> Add Website
+            </button>
+          </div>
+        </div>
+        <div class="dash-table-container">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Tech Stack</th>
+                <th>Order</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="projects-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. CERTIFICATES TAB PANEL -->
+      <section class="dash-tab-panel" id="panel-certificates">
+        <div class="dash-card-header">
+          <h2>Manage Certificates</h2>
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div class="search-bar-wrapper">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-certificates" class="search-control" placeholder="Search certs...">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddModal('certificate')">
+              <i class="fas fa-plus"></i> Add Certificate
+            </button>
+          </div>
+        </div>
+        <div class="dash-table-container">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Certificate Title</th>
+                <th>Issuer</th>
+                <th>Credential ID</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="certs-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. ACHIEVEMENTS TAB PANEL -->
+      <section class="dash-tab-panel" id="panel-achievements">
+        <div class="dash-card-header">
+          <h2>Manage Achievements</h2>
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div class="search-bar-wrapper">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-achievements" class="search-control" placeholder="Search milestones...">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddModal('achievement')">
+              <i class="fas fa-plus"></i> Add Achievement
+            </button>
+          </div>
+        </div>
+        <div class="dash-table-container">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Milestone</th>
+                <th>Category</th>
+                <th>Organization</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="achievements-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 5. PROFILE SETTINGS PANEL -->
+      <section class="dash-tab-panel" id="panel-profile">
+        <div class="glass-card" style="padding:32px;">
+          <form id="profile-settings-form" enctype="multipart/form-data">
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+              <div class="form-group">
+                <label class="form-label" for="profile-name">Developer Name</label>
+                <input type="text" id="profile-name" name="name" class="form-control" placeholder="e.g. John Doe">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profile-role">Primary Role / Title</label>
+                <input type="text" id="profile-role" name="role" class="form-control" placeholder="e.g. Full Stack Developer">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="profile-bio">Bio Description</label>
+              <textarea id="profile-bio" name="bio" class="form-control" style="min-height:100px;" placeholder="Write a short introduction..."></textarea>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+              <div class="form-group">
+                <label class="form-label">Profile Image Photo</label>
+                <div class="drag-drop-box" id="profile-img-drag-box">
+                  <i class="fas fa-user-circle"></i>
+                  <span>Drag & drop image here or click to browse</span>
+                  <input type="file" id="profile-image-file" name="profileImage" accept="image/*">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Upload Resume (PDF)</label>
+                <div class="drag-drop-box" id="profile-resume-drag-box">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>Drag & drop PDF here or click to browse</span>
+                  <input type="file" id="profile-resume-file" name="resume" accept=".pdf">
+                </div>
+              </div>
+            </div>
+
+            <h3 style="margin:32px 0 16px 0; border-bottom:1px solid var(--border-color); padding-bottom:8px;">Social Profiles & Contact Linkages</h3>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+              <div class="form-group">
+                <label class="form-label" for="profile-github">GitHub Profile URL</label>
+                <input type="url" id="profile-github" name="githubUrl" class="form-control" placeholder="https://github.com/username">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profile-linkedin">LinkedIn Profile URL</label>
+                <input type="url" id="profile-linkedin" name="linkedinUrl" class="form-control" placeholder="https://linkedin.com/in/username">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+              <div class="form-group">
+                <label class="form-label" for="profile-whatsapp">WhatsApp Number (with country code)</label>
+                <input type="text" id="profile-whatsapp" name="whatsappNumber" class="form-control" placeholder="e.g. 919876543210">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profile-email">Contact Email Address</label>
+                <input type="email" id="profile-email" name="email" class="form-control" placeholder="developer@example.com">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:16px;">
+              <i class="fas fa-save"></i> Save Settings
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 6. INBOX / MESSAGES PANEL -->
+      <section class="dash-tab-panel" id="panel-inbox">
+        <div class="dash-card-header" style="margin-bottom:32px;">
+          <h2>Inbox Inquiries</h2>
+          <div class="search-bar-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-messages" class="search-control" placeholder="Search inbox messages...">
+          </div>
+        </div>
+        <div class="message-list" id="inbox-messages-container">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Tab Navigation bar switcher -->
+  <nav class="mobile-dash-nav">
+    <div class="mobile-dash-nav-container">
+      <button class="mobile-dash-btn active" data-tab="overview">
+        <i class="fas fa-chart-pie"></i>
+        <span>Overview</span>
+      </button>
+      <button class="mobile-dash-btn" data-tab="projects">
+        <i class="fas fa-briefcase"></i>
+        <span>Websites</span>
+      </button>
+      <button class="mobile-dash-btn" data-tab="certificates">
+        <i class="fas fa-certificate"></i>
+        <span>Certs</span>
+      </button>
+      <button class="mobile-dash-btn" data-tab="inbox">
+        <i class="fas fa-envelope"></i>
+        <span>Inbox</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ---------------------------------------------------- -->
+  <!-- MODAL WINDOWS (Add/Edit Forms) -->
+  <!-- ---------------------------------------------------- -->
+  
+  <!-- Project/Website Modal -->
+  <div class="modal" id="project-modal">
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="project-modal-title">Add Website</h3>
+        <button class="close-modal-btn" onclick="closeModal('project')">&times;</button>
+      </div>
+      <form id="project-form" enctype="multipart/form-data">
+        <input type="hidden" id="project-id" name="id">
+        <div class="form-group">
+          <label class="form-label" for="project-title-input">Website Title</label>
+          <input type="text" id="project-title-input" name="title" class="form-control" required placeholder="e.g. Chatbot Integration">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="form-group">
+            <label class="form-label" for="project-category-input">Category</label>
+            <select id="project-category-input" name="category" class="form-control" required>
+              <option value="Web Applications">Web Applications</option>
+              <option value="Full Stack">Full Stack</option>
+              <option value="AI Projects">AI Projects</option>
+              <option value="Academic Projects">Academic Projects</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="project-order-input">Display Order</label>
+            <input type="number" id="project-order-input" name="order" class="form-control" value="0" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="project-desc-input">Description</label>
+          <textarea id="project-desc-input" name="description" class="form-control" required style="min-height:100px;" placeholder="Explain the project scope..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="project-tech-input">Technologies (Comma separated)</label>
+          <input type="text" id="project-tech-input" name="technologies" class="form-control" required placeholder="e.g. Node.js, Express, MongoDB">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="form-group">
+            <label class="form-label" for="project-github-input">GitHub Repo URL</label>
+            <input type="url" id="project-github-input" name="githubUrl" class="form-control" placeholder="https://github.com/...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="project-live-input">Live Demo URL</label>
+            <input type="url" id="project-live-input" name="liveUrl" class="form-control" placeholder="https://...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Website Screenshot Cover Image</label>
+          <div id="project-edit-preview" class="edit-preview-container" style="display:none;">
+            <img src="" class="edit-preview-thumb" id="project-edit-preview-img">
+            <div class="edit-preview-info">
+              <span>Current Cover Image</span>
+              <a href="#" target="_blank" id="project-edit-preview-link">View full image</a>
+            </div>
+          </div>
+          <div class="drag-drop-box" id="project-drag-box">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Drag & drop image here or click to browse</span>
+            <input type="file" id="project-image-input" name="image" accept="image/*">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
+          <i class="fas fa-check"></i> Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Certificate Modal -->
+  <div class="modal" id="certificate-modal">
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cert-modal-title">Add Certificate</h3>
+        <button class="close-modal-btn" onclick="closeModal('certificate')">&times;</button>
+      </div>
+      <form id="certificate-form" enctype="multipart/form-data">
+        <input type="hidden" id="cert-id" name="id">
+        <div class="form-group">
+          <label class="form-label" for="cert-title-input">Certificate Title</label>
+          <input type="text" id="cert-title-input" name="title" class="form-control" required placeholder="e.g. AWS Cloud Practitioner">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="form-group">
+            <label class="form-label" for="cert-issuer-input">Issuer Organization</label>
+            <input type="text" id="cert-issuer-input" name="issuer" class="form-control" required placeholder="e.g. Amazon Web Services">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cert-date-input">Issue Date</label>
+            <input type="text" id="cert-date-input" name="issueDate" class="form-control" required placeholder="e.g. June 2024">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="form-group">
+            <label class="form-label" for="cert-cred-id-input">Credential ID</label>
+            <input type="text" id="cert-cred-id-input" name="credentialId" class="form-control" placeholder="e.g. AWS-CCP-12345">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cert-cred-input">Verification URL</label>
+            <input type="url" id="cert-cred-input" name="credentialUrl" class="form-control" placeholder="https://aws.amazon.com/...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cert-down-input">Download File URL (PDF or Image)</label>
+          <input type="text" id="cert-down-input" name="downloadUrl" class="form-control" placeholder="e.g. /images/certs/aws.pdf">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Certificate Badge Image Preview</label>
+          <div id="cert-edit-preview" class="edit-preview-container" style="display:none;">
+            <img src="" class="edit-preview-thumb" id="cert-edit-preview-img">
+            <div class="edit-preview-info">
+              <span>Current Badge Image</span>
+              <a href="#" target="_blank" id="cert-edit-preview-link">View full image</a>
+            </div>
+          </div>
+          <div class="drag-drop-box" id="cert-drag-box">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Drag & drop badge image here or click to browse</span>
+            <input type="file" id="cert-image-input" name="image" accept="image/*">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
+          <i class="fas fa-check"></i> Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Achievement Modal -->
+  <div class="modal" id="achievement-modal">
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="ach-modal-title">Add Achievement</h3>
+        <button class="close-modal-btn" onclick="closeModal('achievement')">&times;</button>
+      </div>
+      <form id="achievement-form" enctype="multipart/form-data">
+        <input type="hidden" id="ach-id" name="id">
+        <div class="form-group">
+          <label class="form-label" for="ach-title-input">Achievement Title</label>
+          <input type="text" id="ach-title-input" name="title" class="form-control" required placeholder="e.g. Smart City Hackathon 1st Place">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="form-group">
+            <label class="form-label" for="ach-category-input">Category</label>
+            <select id="ach-category-input" name="category" class="form-control" required>
+              <option value="Award">Award</option>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Internship">Internship</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ach-org-input">Organization</label>
+            <input type="text" id="ach-org-input" name="organization" class="form-control" required placeholder="e.g. Microsoft Labs">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="form-group">
+            <label class="form-label" for="ach-date-input">Completion Date</label>
+            <input type="text" id="ach-date-input" name="date" class="form-control" required placeholder="e.g. November 2024">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Badge Image upload (optional)</label>
+            <div id="ach-edit-preview" class="edit-preview-container" style="display:none;">
+              <img src="" class="edit-preview-thumb" id="ach-edit-preview-img">
+              <div class="edit-preview-info">
+                <span>Current Badge Image</span>
+                <a href="#" target="_blank" id="ach-edit-preview-link">View full image</a>
+              </div>
+            </div>
+            <div class="drag-drop-box" id="ach-drag-box">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Drag & drop image here or click to browse</span>
+              <input type="file" id="ach-image-input" name="image" accept="image/*">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ach-desc-input">Description</label>
+          <textarea id="ach-desc-input" name="description" class="form-control" required style="min-height:100px;" placeholder="Summarize your role or criteria for winning..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
+          <i class="fas fa-check"></i> Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Chart.js Libraries CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Admin Controller Scripts -->
+  <script src="/js/admin-dash.js"></script>
+</body>
+</html>

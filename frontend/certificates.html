@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio | Certificates</title>
+  <meta name="description" content="View my developer certifications and credentials in cloud, databases, and full stack engineering.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container navbar-container">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/projects" class="nav-link">Websites</a></li>
+        <li><a href="/certificates" class="nav-link">Certificates</a></li>
+        <li><a href="/achievements" class="nav-link">Achievements</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li class="nav-actions">
+          <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/admin/login" class="btn btn-primary btn-sm" style="box-shadow:none; padding: 8px 16px;">
+            <i class="fas fa-user-shield"></i> Admin
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Certificates Section -->
+  <section class="section" style="padding-top: 140px; min-height: 80vh;">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-subtitle">Credentials</span>
+        <h2 class="section-title">Certifications Gallery</h2>
+      </div>
+
+      <div class="certificates-grid" id="certs-container" data-aos="fade-up">
+        <!-- Spinner while loading -->
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;" id="certs-loading">
+          <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary-blue);"></i>
+          <p style="margin-top: 12px; color: var(--text-secondary);">Loading certificates...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zoom Preview Modal -->
+  <div id="zoom-modal" class="image-zoom-modal">
+    <button class="zoom-close-btn" id="zoom-close-btn">&times;</button>
+    <img class="zoom-modal-content" id="zoom-modal-img" src="" alt="Certificate Zoom">
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <a href="/" class="footer-logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <div class="social-links">
+        <a href="#" class="social-icon dev-github" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon dev-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon dev-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; <span id="year">2026</span> <span class="dev-name">Developer</span>. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const certsContainer = document.getElementById('certs-container');
+    const loadingEl = document.getElementById('certs-loading');
+
+    const defaultCerts = [
+      {
+        title: "AWS Certified Cloud Practitioner",
+        issuer: "Amazon Web Services",
+        issueDate: "June 2024",
+        credentialUrl: "https://aws.amazon.com",
+        downloadUrl: "#",
+        credentialId: "AWS-CCP-12345",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        title: "MongoDB Certified Associate Developer",
+        issuer: "MongoDB University",
+        issueDate: "January 2024",
+        credentialUrl: "https://university.mongodb.com",
+        downloadUrl: "#",
+        credentialId: "MONGO-DEV-67890",
+        image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        title: "Full Stack Web Development Certification",
+        issuer: "freeCodeCamp",
+        issueDate: "September 2023",
+        credentialUrl: "https://freecodecamp.org",
+        downloadUrl: "#",
+        credentialId: "FCC-FSWD-54321",
+        image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    async function loadCertificates() {
+      try {
+        const res = await fetch('/api/certificates');
+        let certs = [];
+        if (res.ok) {
+          certs = await res.json();
+        }
+
+        if (certs.length === 0) {
+          certs = defaultCerts;
+        }
+
+        if (loadingEl) loadingEl.remove();
+        certsContainer.innerHTML = '';
+
+        certs.forEach(cert => {
+          const credIdHtml = cert.credentialId 
+            ? `<div class="cert-credential-id">ID: ${cert.credentialId}</div>` 
+            : '';
+            
+          const cardHtml = `
+            <div class="glass-card certificate-card glow-card" data-aos="fade-up">
+              <div class="cert-img-container" onclick="zoomImage('${cert.image}')">
+                <img src="${cert.image}" alt="${cert.title}" class="cert-card-img" onerror="this.src='/images/default-certificate.jpg'">
+              </div>
+              <div class="cert-details">
+                <h3>${cert.title}</h3>
+                <h4>Issuer: ${cert.issuer}</h4>
+                <span class="cert-date"><i class="far fa-calendar-alt"></i> Issued: ${cert.issueDate}</span>
+                ${credIdHtml}
+                <div class="cert-links">
+                  <a href="${cert.credentialUrl || '#'}" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-certificate"></i> Verify Credentials
+                  </a>
+                  <a href="${cert.downloadUrl || '#'}" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-download"></i> Download PDF
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+          certsContainer.insertAdjacentHTML('beforeend', cardHtml);
+        });
+
+      } catch (err) {
+        console.error('Error loading certificates:', err);
+        if (loadingEl) loadingEl.remove();
+        certsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #EF4444;">Failed to load certifications. Please try refreshing.</p>';
+      }
+    }
+
+    // Modal Zoom Logic
+    const zoomModal = document.getElementById('zoom-modal');
+    const zoomModalImg = document.getElementById('zoom-modal-img');
+    const zoomCloseBtn = document.getElementById('zoom-close-btn');
+
+    window.zoomImage = function(imgSrc) {
+      if (zoomModal && zoomModalImg) {
+        zoomModalImg.src = imgSrc;
+        zoomModal.classList.add('show');
+      }
+    };
+
+    if (zoomCloseBtn && zoomModal) {
+      zoomCloseBtn.addEventListener('click', () => {
+        zoomModal.classList.remove('show');
+      });
+      zoomModal.addEventListener('click', (e) => {
+        if (e.target === zoomModal) {
+          zoomModal.classList.remove('show');
+        }
+      });
+    }
+
+    loadCertificates();
+  </script>
+</body>
+</html>

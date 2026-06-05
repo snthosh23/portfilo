@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio | Projects</title>
+  <meta name="description" content="View my developer portfolio projects including student course systems, chatbots, and dashboards.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container navbar-container">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/projects" class="nav-link">Websites</a></li>
+        <li><a href="/certificates" class="nav-link">Certificates</a></li>
+        <li><a href="/achievements" class="nav-link">Achievements</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li class="nav-actions">
+          <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/admin/login" class="btn btn-primary btn-sm" style="box-shadow:none; padding: 8px 16px;">
+            <i class="fas fa-user-shield"></i> Admin
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Projects Section -->
+  <section class="section" style="padding-top: 140px; min-height: 80vh;">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-subtitle">Portfolio</span>
+        <h2 class="section-title">Featured Websites</h2>
+      </div>
+
+      <!-- Category Filter Menu -->
+      <div class="project-filter-menu" data-aos="fade-up">
+        <button class="project-filter-btn active" data-category="All">All</button>
+        <button class="project-filter-btn" data-category="Full Stack">Full Stack</button>
+        <button class="project-filter-btn" data-category="AI Projects">AI Projects</button>
+        <button class="project-filter-btn" data-category="Web Applications">Web Applications</button>
+        <button class="project-filter-btn" data-category="Academic Projects">Academic Projects</button>
+      </div>
+
+      <div class="projects-grid" id="projects-container" data-aos="fade-up">
+        <!-- Spinner while loading -->
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;" id="projects-loading">
+          <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary-blue);"></i>
+          <p style="margin-top: 12px; color: var(--text-secondary);">Loading websites...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <a href="/" class="footer-logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <div class="social-links">
+        <a href="#" class="social-icon dev-github" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon dev-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon dev-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; <span id="year">2026</span> <span class="dev-name">Developer</span>. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const projectsContainer = document.getElementById('projects-container');
+    const loadingEl = document.getElementById('projects-loading');
+    let allProjects = [];
+
+    const defaultProjects = [
+      {
+        title: "Student Course Management System",
+        description: "A complete administrative system for enrolling students, assigning courses, tracking grades, and generating dynamic transcripts.",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=60",
+        technologies: ["Node.js", "Express", "MongoDB", "Bootstrap 5"],
+        category: "Web Applications",
+        githubUrl: "https://github.com",
+        liveUrl: "https://google.com"
+      },
+      {
+        title: "Customer Support Chatbot",
+        description: "An AI-powered automated chatbot designed to answer common queries, log support tickets, and delegate tasks to human operators.",
+        image: "https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?w=600&auto=format&fit=crop&q=60",
+        technologies: ["JavaScript", "Node.js", "Dialogflow", "Socket.io"],
+        category: "AI Projects",
+        githubUrl: "https://github.com",
+        liveUrl: "https://google.com"
+      },
+      {
+        title: "Attendance Management System",
+        description: "RFID-compatible management tool mapping daily employee or student attendance logs, leave balances, and custom monthly reports.",
+        image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600&auto=format&fit=crop&q=60",
+        technologies: ["Express", "MongoDB", "Vanilla JS", "CSS3"],
+        category: "Full Stack",
+        githubUrl: "https://github.com",
+        liveUrl: "https://google.com"
+      },
+      {
+        title: "Portfolio Website",
+        description: "The very site you are viewing! Fully responsive, equipped with a custom glassmorphic admin dashboard to manage records.",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=60",
+        technologies: ["JavaScript", "Node.js", "MongoDB", "JWT Auth"],
+        category: "Web Applications",
+        githubUrl: "https://github.com",
+        liveUrl: "https://google.com"
+      }
+    ];
+
+    async function loadProjects() {
+      try {
+        const res = await fetch('/api/projects');
+        if (res.ok) {
+          allProjects = await res.json();
+        }
+
+        if (allProjects.length === 0) {
+          allProjects = defaultProjects;
+        }
+
+        if (loadingEl) loadingEl.remove();
+        renderProjects('All');
+        setupFilterListeners();
+
+      } catch (err) {
+        console.error('Error loading projects:', err);
+        if (loadingEl) loadingEl.remove();
+        projectsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #EF4444;">Failed to load websites. Please try refreshing.</p>';
+      }
+    }
+
+    function renderProjects(filterCategory) {
+      projectsContainer.innerHTML = '';
+      
+      const filtered = filterCategory === 'All' 
+        ? allProjects 
+        : allProjects.filter(p => p.category === filterCategory);
+
+      if (filtered.length === 0) {
+        projectsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 40px;">No websites found in this category.</p>';
+        return;
+      }
+
+      filtered.forEach(project => {
+        const techTags = project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('');
+        const categoryBadge = project.category ? `<span class="project-category-badge">${project.category}</span>` : '';
+        
+        const cardHtml = `
+          <div class="glass-card project-card glow-card" data-aos="fade-up">
+            <div class="project-img-container">
+              ${categoryBadge}
+              <img src="${project.image}" alt="${project.title}" class="project-card-img" onerror="this.src='/images/default-project.jpg'">
+            </div>
+            <div class="project-details">
+              <h3>${project.title}</h3>
+              <p>${project.description}</p>
+              <div class="project-tech-tags">
+                ${techTags}
+              </div>
+              <div class="project-links">
+                <a href="${project.githubUrl || '#'}" class="btn btn-secondary" target="_blank">
+                  <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="${project.liveUrl || '#'}" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-external-link-alt"></i> Live Demo
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+        projectsContainer.insertAdjacentHTML('beforeend', cardHtml);
+      });
+    }
+
+    function setupFilterListeners() {
+      const buttons = document.querySelectorAll('.project-filter-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const category = btn.getAttribute('data-category');
+          renderProjects(category);
+        });
+      });
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>

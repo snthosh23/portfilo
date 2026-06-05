@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio | About & Skills</title>
+  <meta name="description" content="Learn more about my professional background, education history, and specialized development skills.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container navbar-container">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/projects" class="nav-link">Websites</a></li>
+        <li><a href="/certificates" class="nav-link">Certificates</a></li>
+        <li><a href="/achievements" class="nav-link">Achievements</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li class="nav-actions">
+          <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/admin/login" class="btn btn-primary btn-sm" style="box-shadow:none; padding: 8px 16px;">
+            <i class="fas fa-user-shield"></i> Admin
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- About Section -->
+  <section class="section" style="padding-top: 140px;">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-subtitle">Biography</span>
+        <h2 class="section-title">About Me</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text" data-aos="fade-right">
+          <h3>Who I Am</h3>
+          <p class="dev-bio">A passionate developer specializing in Node.js, Express, MongoDB, and modern web interfaces. I focus on building reliable, high-performance backends alongside responsive, aesthetic frontends.</p>
+          <p>I have experience leading teams, collaborating on hackathons, and delivering production-ready platforms for organizations. I am constantly learning new techniques to refine my development pipeline and keep up with web standards.</p>
+          
+          <div class="btn-group" style="margin-top: 32px;">
+            <a href="#" class="btn btn-primary dev-resume">
+              <i class="fas fa-file-download"></i> Download Resume
+            </a>
+            <a href="/contact" class="btn btn-secondary">
+              <i class="fas fa-paper-plane"></i> Hire Me
+            </a>
+          </div>
+        </div>
+
+        <div class="about-image" data-aos="fade-left">
+          <div class="profile-img-wrapper">
+            <img src="/images/default-profile.jpg" alt="Profile" class="profile-img dev-image">
+          </div>
+        </div>
+      </div>
+
+      <!-- Education & Experience Timelines -->
+      <div class="timelines-container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+          
+          <!-- Education Column -->
+          <div data-aos="fade-up">
+            <h3 class="timeline-title"><i class="fas fa-graduation-cap"></i> Education</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <span class="timeline-date">2020 - 2024</span>
+                <h4>Bachelor of Computer Applications (BCA)</h4>
+                <h5>State University of Technology</h5>
+                <p>Focused on Data Structures, Object-Oriented Programming, and Web Technologies. Completed capstone database projects.</p>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <span class="timeline-date">2018 - 2020</span>
+                <h4>Senior Secondary Education</h4>
+                <h5>Science Academy School</h5>
+                <p>Majored in Mathematics, Physics, and Computer Science. Graduated with top marks.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Column -->
+          <div data-aos="fade-up" data-aos-delay="200">
+            <h3 class="timeline-title"><i class="fas fa-briefcase"></i> Experience</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <span class="timeline-date">2024 - Present</span>
+                <h4>Associate Full Stack Developer</h4>
+                <h5>Apex Tech Solutions</h5>
+                <p>Build and maintain REST APIs using Express and Node.js. Optimize mongoose queries and integrate Cloudinary image management solutions.</p>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <span class="timeline-date">2023 - 2024</span>
+                <h4>Backend Development Intern</h4>
+                <h5>Pinnacle Systems</h5>
+                <p>Designed database schemas for student management projects, built real-time customer chatbots, and debugged authorization flows.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section bg-secondary" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-subtitle">Proficiencies</span>
+        <h2 class="section-title">My Skills</h2>
+      </div>
+
+      <div class="skills-grid" data-aos="fade-up">
+        <!-- Skill 1 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fab fa-html5" style="color: #E34F26;"></i> HTML5</span>
+            <span class="skill-percentage">95%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 95%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 2 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fab fa-css3-alt" style="color: #1572B6;"></i> CSS3</span>
+            <span class="skill-percentage">90%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 90%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 3 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fab fa-js" style="color: #F7DF1E;"></i> JavaScript</span>
+            <span class="skill-percentage">88%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 88%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 4 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fab fa-node-js" style="color: #339933;"></i> Node.js</span>
+            <span class="skill-percentage">85%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 85%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 5 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fas fa-server" style="color: #68A063;"></i> Express.js</span>
+            <span class="skill-percentage">85%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 85%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 6 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fas fa-database" style="color: #47A248;"></i> MongoDB</span>
+            <span class="skill-percentage">80%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 80%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 7 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fas fa-fire" style="color: #FFCA28;"></i> Firebase</span>
+            <span class="skill-percentage">75%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 75%;"></div>
+          </div>
+        </div>
+
+        <!-- Skill 8 -->
+        <div class="glass-card skill-card glow-card">
+          <div class="skill-info">
+            <span class="skill-name"><i class="fab fa-git-alt" style="color: #F1502F;"></i> Git & GitHub</span>
+            <span class="skill-percentage">90%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 90%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <a href="/" class="footer-logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <div class="social-links">
+        <a href="#" class="social-icon dev-github" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon dev-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon dev-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; <span id="year">2026</span> <span class="dev-name">Developer</span>. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top & Toast Container -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

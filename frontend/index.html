@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio | Home</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Welcome to my professional developer portfolio. Browse my recent projects, certificates, achievements, and get in touch.">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Animation Library CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/projects" class="nav-link">Websites</a></li>
+        <li><a href="/certificates" class="nav-link">Certificates</a></li>
+        <li><a href="/achievements" class="nav-link">Achievements</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li class="nav-actions">
+          <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/admin/login" class="btn btn-primary btn-sm" style="box-shadow:none; padding: 8px 16px;">
+            <i class="fas fa-user-shield"></i> Admin
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+          <span class="section-subtitle">Hello, I'm</span>
+          <h1 class="dev-name">Santhosh Kumar</h1>
+          <h2 class="dev-role-container">
+            I'm a <span id="typewriter-text" style="color: var(--primary-blue);"></span><span class="typewriter-cursor">|</span>
+          </h2>
+          <p class="dev-bio">A passionate developer specializing in Node.js, Express, MongoDB, and modern web interfaces. Creating clean, efficient, and user-centric web applications.</p>
+          <div class="btn-group">
+            <a href="/projects" class="btn btn-primary">
+              <i class="fas fa-briefcase"></i> View Websites
+            </a>
+            <a href="/contact" class="btn btn-secondary">
+              <i class="fas fa-paper-plane"></i> Contact Me
+            </a>
+            <a href="#" class="btn btn-secondary dev-resume">
+              <i class="fas fa-file-download"></i> Resume
+            </a>
+          </div>
+        </div>
+        <div class="hero-image-container" data-aos="fade-left" data-aos-duration="1000">
+          <div class="hero-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+          </div>
+          <div class="profile-img-wrapper">
+            <img src="/images/default-profile.jpg" alt="Profile Image" class="profile-img dev-image">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="section bg-secondary" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up" data-aos-duration="800">
+        <span class="section-subtitle">Key Stats</span>
+        <h2 class="section-title">Track Record at a Glance</h2>
+      </div>
+      <div class="stats-grid" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+        <div class="glass-card stat-card glow-card">
+          <div class="stat-number" id="stat-projects-count">0</div>
+          <div class="stat-title">Completed Websites</div>
+        </div>
+        <div class="glass-card stat-card glow-card">
+          <div class="stat-number" id="stat-certs-count">0</div>
+          <div class="stat-title">Professional Credentials</div>
+        </div>
+        <div class="glass-card stat-card glow-card">
+          <div class="stat-number" id="stat-achievements-count">0</div>
+          <div class="stat-title">Awards & Internships</div>
+        </div>
+        <div class="glass-card stat-card glow-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-title">Client Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <a href="/" class="footer-logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <div class="social-links">
+        <a href="#" class="social-icon dev-github" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon dev-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon dev-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; <span id="year">2026</span> <span class="dev-name">Developer</span>. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top & Toast Container -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script src="/js/main.js"></script>
+  <!-- AOS Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

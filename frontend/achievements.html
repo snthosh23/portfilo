@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio | Achievements</title>
+  <meta name="description" content="Explore my professional achievements, awards, hackathon victories, and internship milestones.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container navbar-container">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/projects" class="nav-link">Websites</a></li>
+        <li><a href="/certificates" class="nav-link">Certificates</a></li>
+        <li><a href="/achievements" class="nav-link">Achievements</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li class="nav-actions">
+          <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="/admin/login" class="btn btn-primary btn-sm" style="box-shadow:none; padding: 8px 16px;">
+            <i class="fas fa-user-shield"></i> Admin
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Achievements Section -->
+  <section class="section" style="padding-top: 140px; min-height: 80vh;">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-subtitle">Milestones</span>
+        <h2 class="section-title">Achievements & Awards</h2>
+      </div>
+
+      <!-- Stats Dashboard Counters -->
+      <div class="ach-stats-grid" data-aos="fade-up">
+        <div class="ach-stat-card">
+          <div class="ach-stat-number" id="stats-total">0</div>
+          <div class="ach-stat-label">Total Milestones</div>
+        </div>
+        <div class="ach-stat-card">
+          <div class="ach-stat-number" id="stats-awards">0</div>
+          <div class="ach-stat-label">Awards & Honors</div>
+        </div>
+        <div class="ach-stat-card">
+          <div class="ach-stat-number" id="stats-hackathons">0</div>
+          <div class="ach-stat-label">Hackathons Won</div>
+        </div>
+        <div class="ach-stat-card">
+          <div class="ach-stat-number" id="stats-internships">0</div>
+          <div class="ach-stat-label">Internships Done</div>
+        </div>
+      </div>
+
+      <!-- Controls: Categories Filter Tabs + Search Widget -->
+      <div class="achievements-controls" data-aos="fade-up">
+        <div class="achievement-filter" style="margin-bottom: 0;">
+          <button class="filter-btn active" data-filter="All">All</button>
+          <button class="filter-btn" data-filter="Award">Awards</button>
+          <button class="filter-btn" data-filter="Hackathon">Hackathons</button>
+          <button class="filter-btn" data-filter="Internship">Internships</button>
+          <button class="filter-btn" data-filter="Other">Others</button>
+        </div>
+        
+        <div class="achievements-search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="achievements-search" class="achievements-search-input" placeholder="Search achievements...">
+        </div>
+      </div>
+
+      <div class="achievements-grid" id="achievements-container" data-aos="fade-up">
+        <!-- Spinner while loading -->
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;" id="achievements-loading">
+          <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary-blue);"></i>
+          <p style="margin-top: 12px; color: var(--text-secondary);">Loading milestones...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zoom Preview Modal -->
+  <div id="zoom-modal" class="image-zoom-modal">
+    <button class="zoom-close-btn" id="zoom-close-btn">&times;</button>
+    <img class="zoom-modal-content" id="zoom-modal-img" src="" alt="Achievement Zoom">
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <a href="/" class="footer-logo">
+        <i class="fas fa-code"></i> <span class="dev-name">Developer</span>
+      </a>
+      <div class="social-links">
+        <a href="#" class="social-icon dev-github" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon dev-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon dev-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; <span id="year">2026</span> <span class="dev-name">Developer</span>. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const achievementsContainer = document.getElementById('achievements-container');
+    const loadingEl = document.getElementById('achievements-loading');
+    let allAchievements = [];
+
+    const defaultAchievements = [
+      {
+        title: "Best Innovator Award",
+        category: "Award",
+        organization: "National Innovation Council",
+        date: "March 2025",
+        description: "Awarded top innovator among 500+ participants for developing an eco-friendly automated power consumption logger."
+      },
+      {
+        title: "Smart City Hackathon Winner",
+        category: "Hackathon",
+        organization: "Metropolitan Municipality",
+        date: "November 2024",
+        description: "Placed 1st for creating a Node.js-based public bus routing optimizer that reduced average transit delays by 18%."
+      },
+      {
+        title: "Backend Engineering Internship",
+        category: "Internship",
+        organization: "Apex Software Labs",
+        date: "May - August 2024",
+        description: "Built automated data migration script pipelines and integrated JWT session credentials into student registers."
+      }
+    ];
+
+    let currentFilter = 'All';
+    let searchQuery = '';
+
+    async function loadAchievements() {
+      try {
+        const res = await fetch('/api/achievements');
+        if (res.ok) {
+          allAchievements = await res.json();
+        }
+
+        if (allAchievements.length === 0) {
+          allAchievements = defaultAchievements;
+        }
+
+        if (loadingEl) loadingEl.remove();
+        updateStats(allAchievements);
+        renderAchievementsFiltered();
+        setupFilterButtons();
+        setupSearchControl();
+
+      } catch (err) {
+        console.error('Error loading achievements:', err);
+        if (loadingEl) loadingEl.remove();
+        achievementsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #EF4444;">Failed to load achievements. Please try refreshing.</p>';
+      }
+    }
+
+    function updateStats(list) {
+      const total = list.length;
+      const awards = list.filter(a => a.category === 'Award').length;
+      const hackathons = list.filter(a => a.category === 'Hackathon').length;
+      const internships = list.filter(a => a.category === 'Internship').length;
+
+      animateStat('stats-total', total);
+      animateStat('stats-awards', awards);
+      animateStat('stats-hackathons', hackathons);
+      animateStat('stats-internships', internships);
+    }
+
+    function animateStat(id, targetNum) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let currentNum = 0;
+      const duration = 800; // 0.8s
+      const stepTime = Math.max(Math.floor(duration / (targetNum || 1)), 25);
+      
+      if (targetNum === 0) {
+        el.textContent = '0';
+        return;
+      }
+
+      const timer = setInterval(() => {
+        currentNum += 1;
+        el.textContent = currentNum;
+        if (currentNum >= targetNum) {
+          el.textContent = targetNum;
+          clearInterval(timer);
+        }
+      }, stepTime);
+    }
+
+    function getAchievementEmblemHtml(item) {
+      const hasCustomImage = item.image && item.image !== '/images/default-achievement.jpg';
+      if (hasCustomImage) {
+        return `
+          <div class="ach-img-container" onclick="zoomImage('${item.image}')">
+            <img src="${item.image}" alt="${item.title}" class="ach-card-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="ach-img-container ach-bg-${item.category ? item.category.toLowerCase() : 'other'}" style="display:none; width:100%; height:100%; position:absolute; top:0; left:0; align-items:center; justify-content:center;">
+              <i class="${getCategoryIconClass(item.category)} ach-fallback-emblem"></i>
+            </div>
+          </div>
+        `;
+      } else {
+        const cat = item.category ? item.category.toLowerCase() : 'other';
+        const iconClass = getCategoryIconClass(item.category);
+        return `
+          <div class="ach-img-container ach-bg-${cat}">
+            <i class="${iconClass} ach-fallback-emblem"></i>
+          </div>
+        `;
+      }
+    }
+
+    function getCategoryIconClass(category) {
+      switch (category) {
+        case 'Award': return 'fas fa-trophy';
+        case 'Hackathon': return 'fas fa-laptop-code';
+        case 'Internship': return 'fas fa-briefcase';
+        default: return 'fas fa-award';
+      }
+    }
+
+    function renderAchievementsFiltered() {
+      achievementsContainer.innerHTML = '';
+      
+      const filtered = allAchievements.filter(item => {
+        const matchesCategory = currentFilter === 'All' || item.category === currentFilter;
+        const matchesSearch = searchQuery === '' || 
+          item.title.toLowerCase().includes(searchQuery) ||
+          item.description.toLowerCase().includes(searchQuery) ||
+          item.organization.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        achievementsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 40px;">No achievements found.</p>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const emblemHtml = getAchievementEmblemHtml(item);
+        const cardHtml = `
+          <div class="glass-card achievement-card glow-card" data-category="${item.category}" data-aos="fade-up">
+            ${emblemHtml}
+            <div class="ach-details">
+              <span class="ach-category-tag ach-tag-${item.category ? item.category.toLowerCase() : 'other'}">${item.category || 'Other'}</span>
+              <h3>${item.title}</h3>
+              <h4>${item.organization}</h4>
+              <p>${item.description}</p>
+              <span class="achievement-date"><i class="far fa-calendar-alt"></i> ${item.date}</span>
+            </div>
+          </div>
+        `;
+        achievementsContainer.insertAdjacentHTML('beforeend', cardHtml);
+      });
+    }
+
+    function renderAchievements(filterCategory) {
+      currentFilter = filterCategory;
+      renderAchievementsFiltered();
+    }
+
+    function setupFilterButtons() {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filterValue = btn.getAttribute('data-filter');
+          renderAchievements(filterValue);
+        });
+      });
+    }
+
+    function setupSearchControl() {
+      const searchInput = document.getElementById('achievements-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value.toLowerCase().trim();
+          renderAchievementsFiltered();
+        });
+      }
+    }
+
+    // Modal Zoom Lightbox Logic
+    const zoomModal = document.getElementById('zoom-modal');
+    const zoomModalImg = document.getElementById('zoom-modal-img');
+    const zoomCloseBtn = document.getElementById('zoom-close-btn');
+
+    window.zoomImage = function(imgSrc) {
+      if (zoomModal && zoomModalImg) {
+        zoomModalImg.src = imgSrc;
+        zoomModal.classList.add('show');
+      }
+    };
+
+    if (zoomCloseBtn && zoomModal) {
+      zoomCloseBtn.addEventListener('click', () => {
+        zoomModal.classList.remove('show');
+      });
+      zoomModal.addEventListener('click', (e) => {
+        if (e.target === zoomModal) {
+          zoomModal.classList.remove('show');
+        }
+      });
+    }
+
+    loadAchievements();
+  </script>
+</body>
+</html>
