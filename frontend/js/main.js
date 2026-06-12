@@ -120,6 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 9. Statistics Counter Fetcher (Homepage or About page only)
   initializeStatsCounter();
+
+  // 10. Start Custom Animation Systems
+  initializeCanvasParticles();
+  initializeCardEffects();
+  initializeSkillProgressObserver();
+  initializeMagneticButtons();
 });
 
 // Toast notification helper
@@ -162,7 +168,7 @@ async function fetchDeveloperProfile() {
   try {
     const res = await fetch('/api/profile');
     if (!res.ok) return;
-    const profile = await res.ok ? await res.json() : {};
+    const profile = await res.json();
 
     // Populate common UI fields if they exist
     const devNameElements = document.querySelectorAll('.dev-name');
@@ -293,6 +299,67 @@ async function fetchDeveloperProfile() {
       });
       const floatBtn = document.getElementById('whatsapp-float-widget');
       if (floatBtn) floatBtn.style.display = 'none';
+    }
+
+    // Populate dynamic Skills on About page if present
+    const skillsContainer = document.querySelector('.skills-grid');
+    if (skillsContainer && profile.skills && profile.skills.length > 0) {
+      skillsContainer.innerHTML = '';
+      profile.skills.forEach(skill => {
+        const skillHtml = `
+          <div class="glass-card skill-card glow-card">
+            <div class="skill-info">
+              <span class="skill-name">
+                <i class="${skill.icon || 'fas fa-award'}" style="color: ${skill.color || 'var(--primary-blue)'};"></i> 
+                ${skill.name}
+              </span>
+              <span class="skill-percentage">${skill.percentage}%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 0%;" data-width="${skill.percentage}%"></div>
+            </div>
+          </div>
+        `;
+        skillsContainer.insertAdjacentHTML('beforeend', skillHtml);
+      });
+      // Re-initialize progress bar observers for the newly injected bars
+      initializeSkillProgressObserver();
+    }
+
+    // Populate dynamic Education Timeline on About page if present
+    const eduContainer = document.getElementById('education-timeline-container');
+    if (eduContainer && profile.education && profile.education.length > 0) {
+      eduContainer.innerHTML = '';
+      profile.education.forEach(edu => {
+        const eduHtml = `
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-date">${edu.year}</span>
+            <h4>${edu.title}</h4>
+            <h5>${edu.subtitle}</h5>
+            <p>${edu.description}</p>
+          </div>
+        `;
+        eduContainer.insertAdjacentHTML('beforeend', eduHtml);
+      });
+    }
+
+    // Populate dynamic Experience Timeline on About page if present
+    const expContainer = document.getElementById('experience-timeline-container');
+    if (expContainer && profile.experience && profile.experience.length > 0) {
+      expContainer.innerHTML = '';
+      profile.experience.forEach(exp => {
+        const expHtml = `
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-date">${exp.year}</span>
+            <h4>${exp.title}</h4>
+            <h5>${exp.subtitle}</h5>
+            <p>${exp.description}</p>
+          </div>
+        `;
+        expContainer.insertAdjacentHTML('beforeend', expHtml);
+      });
     }
 
     // Save developer settings in window object
@@ -575,4 +642,250 @@ function animateNumber(element, targetNum) {
       clearInterval(timer);
     }
   }, stepTime);
+}
+
+// =========================================================================
+// PREMIUM ANIMATIONS & MICRO-INTERACTIONS IMPLEMENTATION
+// =========================================================================
+
+// 1. Hero Particle Canvas Background
+function initializeCanvasParticles() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+
+  // Set canvas size
+  function resizeCanvas() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Particles config
+  const particles = [];
+  const particleCount = Math.min(Math.floor((canvas.width * canvas.height) / 14000), 75);
+  const connectionDistance = 120;
+  
+  let mouse = { x: null, y: null, radius: 110 };
+  canvas.parentElement.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  canvas.parentElement.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  // Particle Class
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.35; // Slower elegant speed
+      this.vy = (Math.random() - 0.5) * 0.35;
+      this.radius = Math.random() * 2 + 1;
+      this.baseAlpha = Math.random() * 0.25 + 0.12;
+      this.alpha = this.baseAlpha;
+    }
+
+    draw() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = isDark 
+        ? `rgba(96, 165, 250, ${this.alpha})` // light blue in dark mode
+        : `rgba(37, 99, 235, ${this.alpha})`; // primary blue in light mode
+      ctx.fill();
+    }
+
+    update() {
+      // Bounce off boundaries
+      if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+      if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Mouse interactive push away
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouse.radius) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          // Apply a gentle push force
+          this.x -= dx / dist * force * 1.0;
+          this.y -= dy / dist * force * 1.0;
+          this.alpha = Math.min(this.baseAlpha * 2.2, 0.7);
+        } else {
+          if (this.alpha > this.baseAlpha) {
+            this.alpha -= 0.01;
+          }
+        }
+      } else {
+        if (this.alpha > this.baseAlpha) {
+          this.alpha -= 0.01;
+        }
+      }
+    }
+  }
+
+  // Create particles
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+
+  // Draw lines between nearby particles
+  function drawLines() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < connectionDistance) {
+          const alpha = (1 - dist / connectionDistance) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = isDark
+            ? `rgba(96, 165, 250, ${alpha})`
+            : `rgba(37, 99, 235, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  // Animation Loop
+  function animate() {
+    // Skip calculation and drawing if canvas is hidden on mobile to conserve CPU
+    if (canvas.offsetWidth === 0) {
+      animationFrameId = requestAnimationFrame(animate);
+      return;
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    
+    drawLines();
+    animationFrameId = requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+// 2. Interactive Card tilt & spotlight glow tracing using event delegation
+function initializeCardEffects() {
+  document.addEventListener('mousemove', (e) => {
+    // Disable on mobile/tablet to avoid sticky layouts and save battery
+    if (window.innerWidth <= 768) return;
+    
+    const card = e.target.closest('.glass-card, .glow-card');
+    if (!card) return;
+    
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; // x coordinate within the card
+    const y = e.clientY - rect.top;  // y coordinate within the card
+    
+    // Set coordinates for Linear/Vercel spotlight glow
+    const xPercent = (x / rect.width) * 100;
+    const yPercent = (y / rect.height) * 100;
+    card.style.setProperty('--mx', `${xPercent}%`);
+    card.style.setProperty('--my', `${yPercent}%`);
+    
+    // 3D perspective tilt calculations
+    if (card.classList.contains('glass-card')) {
+      const intensity = 8; // Max tilt in degrees
+      const rx = -(y - rect.height / 2) / (rect.height / 2) * intensity;
+      const ry = (x - rect.width / 2) / (rect.width / 2) * intensity;
+      
+      // Temporarily bypass transition so the tilt feels perfectly responsive
+      card.style.transition = 'none';
+      card.style.setProperty('--rx', `${rx}deg`);
+      card.style.setProperty('--ry', `${ry}deg`);
+    }
+  });
+  
+  document.addEventListener('mouseout', (e) => {
+    const card = e.target.closest('.glass-card, .glow-card');
+    if (!card) return;
+    
+    // Only reset if the cursor left the card completely (not just entering a child element)
+    const related = e.relatedTarget;
+    if (!related || !card.contains(related)) {
+      // Re-enable smooth transition so card snaps back gracefully
+      card.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease, border-color 0.25s ease';
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    }
+  });
+}
+
+// 3. Scroll progress observer to trigger skill bars dynamically when scrolled into view
+function initializeSkillProgressObserver() {
+  const progressBars = document.querySelectorAll('.progress-bar');
+  if (progressBars.length === 0) return;
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const targetWidth = bar.getAttribute('data-width');
+        if (targetWidth) {
+          bar.style.width = targetWidth;
+        }
+        observer.unobserve(bar);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  progressBars.forEach(bar => observer.observe(bar));
+}
+
+// 4. Magnetic Interactive Hover effects for CTA buttons and social icons
+function initializeMagneticButtons() {
+  const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .social-icon');
+  
+  buttons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      // Disable on mobile/tablet to avoid bugs with tap interactions
+      if (window.innerWidth <= 768) return;
+      
+      const rect = btn.getBoundingClientRect();
+      const btnX = rect.left + rect.width / 2;
+      const btnY = rect.top + rect.height / 2;
+      
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      const distanceX = mouseX - btnX;
+      const distanceY = mouseY - btnY;
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      
+      // Pull element towards mouse if within 45 pixels of center
+      if (distance < 45) {
+        const pullStrength = 0.25; // 25% pull intensity
+        btn.style.transform = `translate(${distanceX * pullStrength}px, ${distanceY * pullStrength}px)`;
+      } else {
+        btn.style.transform = '';
+      }
+    });
+    
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
 }

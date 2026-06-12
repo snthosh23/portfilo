@@ -260,10 +260,13 @@
       
       const filtered = allAchievements.filter(item => {
         const matchesCategory = currentFilter === 'All' || item.category === currentFilter;
+        const title = item.title || '';
+        const desc = item.description || '';
+        const org = item.organization || '';
         const matchesSearch = searchQuery === '' || 
-          item.title.toLowerCase().includes(searchQuery) ||
-          item.description.toLowerCase().includes(searchQuery) ||
-          item.organization.toLowerCase().includes(searchQuery);
+          title.toLowerCase().includes(searchQuery) ||
+          desc.toLowerCase().includes(searchQuery) ||
+          org.toLowerCase().includes(searchQuery);
         return matchesCategory && matchesSearch;
       });
 

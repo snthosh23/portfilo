@@ -37,7 +37,7 @@ exports.getProfile = async (req, res) => {
 // @desc    Update developer profile
 // @access  Private
 exports.updateProfile = async (req, res) => {
-  const { name, role, bio, githubUrl, linkedinUrl, whatsappNumber, email } = req.body;
+  const { name, role, bio, githubUrl, linkedinUrl, whatsappNumber, email, skills, education, experience } = req.body;
 
   try {
     if (global.dbFallback) {
@@ -51,6 +51,9 @@ exports.updateProfile = async (req, res) => {
       if (linkedinUrl) profile.linkedinUrl = linkedinUrl;
       if (whatsappNumber !== undefined) profile.whatsappNumber = whatsappNumber;
       if (email) profile.email = email;
+      if (skills) profile.skills = typeof skills === 'string' ? JSON.parse(skills) : skills;
+      if (education) profile.education = typeof education === 'string' ? JSON.parse(education) : education;
+      if (experience) profile.experience = typeof experience === 'string' ? JSON.parse(experience) : experience;
 
       // Handle profile image upload if provided
       if (req.files && req.files.profileImage) {
@@ -83,6 +86,9 @@ exports.updateProfile = async (req, res) => {
     if (linkedinUrl) profile.linkedinUrl = linkedinUrl;
     if (whatsappNumber !== undefined) profile.whatsappNumber = whatsappNumber;
     if (email) profile.email = email;
+    if (skills) profile.skills = typeof skills === 'string' ? JSON.parse(skills) : skills;
+    if (education) profile.education = typeof education === 'string' ? JSON.parse(education) : education;
+    if (experience) profile.experience = typeof experience === 'string' ? JSON.parse(experience) : experience;
 
     // Handle profile image upload if provided
     if (req.files && req.files.profileImage) {

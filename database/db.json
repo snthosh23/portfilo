@@ -16,7 +16,109 @@
     "linkedinUrl": "https://linkedin.com",
     "whatsappNumber": "",
     "email": "santhosh@example.com",
-    "visitorsCount": 31
+    "visitorsCount": 76,
+    "skills": [
+      {
+        "name": "HTML5",
+        "percentage": 95,
+        "icon": "fab fa-html5",
+        "color": "#e34f26"
+      },
+      {
+        "name": "CSS3",
+        "percentage": 90,
+        "icon": "fab fa-css3-alt",
+        "color": "#1572b6"
+      },
+      {
+        "name": "JavaScript",
+        "percentage": 88,
+        "icon": "fab fa-js",
+        "color": "#f7df1e"
+      },
+      {
+        "name": "Node.js",
+        "percentage": 85,
+        "icon": "fab fa-node-js",
+        "color": "#339933"
+      },
+      {
+        "name": "Express.js",
+        "percentage": 85,
+        "icon": "fas fa-server",
+        "color": "#68a063"
+      },
+      {
+        "name": "MongoDB",
+        "percentage": 80,
+        "icon": "fas fa-database",
+        "color": "#47a248"
+      },
+      {
+        "name": "Firebase",
+        "percentage": 75,
+        "icon": "fas fa-fire",
+        "color": "#ffca28"
+      },
+      {
+        "name": "Git & GitHub",
+        "percentage": 90,
+        "icon": "fab fa-git-alt",
+        "color": "#f1502f"
+      },
+      {
+        "name": "Tailwind CSS",
+        "percentage": 85,
+        "icon": "fab fa-css3",
+        "color": "#2563eb"
+      },
+      {
+        "name": "Bootstrap",
+        "percentage": 80,
+        "icon": "fab fa-bootstrap",
+        "color": "#2563eb"
+      },
+      {
+        "name": "html",
+        "percentage": 80,
+        "icon": "fab fa-html5",
+        "color": "#2563eb"
+      }
+    ],
+    "education": [
+      {
+        "year": "2023-2027",
+        "title": "Bachelor of Computer Applications (BCA)",
+        "subtitle": "State University of Technology",
+        "description": "Focused on Data Structures, Object-Oriented Programming, and Web Technologies. Completed capstone database projects."
+      },
+      {
+        "year": "2023- 2027",
+        "title": "Senior Secondary Education",
+        "subtitle": "Science Academy School",
+        "description": "Majored in Mathematics, Physics, and Computer Science. Graduated with top marks."
+      },
+      {
+        "year": "2000",
+        "title": "fffff",
+        "subtitle": "fvgv",
+        "description": "cvvbb"
+      }
+    ],
+    "experience": [
+      {
+        "year": "2024 - Present",
+        "title": "Associate Full Stack Developer",
+        "subtitle": "Apex Tech Solutions",
+        "description": "Build and maintain REST APIs using Express and Node.js. Optimize mongoose queries and integrate Cloudinary image management solutions."
+      },
+      {
+        "year": "2023 - 2024",
+        "title": "Backend Development Intern",
+        "subtitle": "Pinnacle Systems",
+        "description": "Designed database schemas for student management projects, built real-time customer chatbots, and debugged authorization flows."
+      }
+    ]
   },
   "projects": [
     {
@@ -138,6 +240,14 @@
       "subject": "Hello from subagent",
       "message": "love y",
       "createdAt": "2026-06-05T10:19:56.700Z"
+    },
+    {
+      "_id": "msg-1781245952285",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "subject": "Hello",
+      "message": "This is a test message.",
+      "createdAt": "2026-06-12T06:32:32.285Z"
     }
   ]
 }

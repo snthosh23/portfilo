@@ -141,6 +141,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load initial Overview stats
   loadOverviewStats();
+
+  // Setup dynamic Profile settings event listeners
+  document.getElementById('add-skill-field-btn')?.addEventListener('click', () => renderSkillRow());
+  document.getElementById('add-edu-field-btn')?.addEventListener('click', () => renderTimelineRow('education-edit-container'));
+  document.getElementById('add-exp-field-btn')?.addEventListener('click', () => renderTimelineRow('experience-edit-container'));
+
+  // Event delegation to remove dynamic fields
+  document.getElementById('profile-settings-form')?.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.remove-field-btn');
+    if (removeBtn) {
+      const row = removeBtn.closest('.skill-edit-row, .timeline-edit-row');
+      if (row) row.remove();
+    }
+  });
 });
 
 // Toast notification helper
@@ -568,6 +582,32 @@ async function loadProfileForm() {
     document.querySelectorAll('.drag-drop-box').forEach(box => {
       resetDragDropBox(box);
     });
+
+    // Populate dynamic skills and timelines
+    const skillsContainer = document.getElementById('skills-edit-container');
+    const eduContainer = document.getElementById('education-edit-container');
+    const expContainer = document.getElementById('experience-edit-container');
+
+    if (skillsContainer) {
+      skillsContainer.innerHTML = '';
+      if (profile.skills && profile.skills.length > 0) {
+        profile.skills.forEach(s => renderSkillRow(s));
+      }
+    }
+
+    if (eduContainer) {
+      eduContainer.innerHTML = '';
+      if (profile.education && profile.education.length > 0) {
+        profile.education.forEach(e => renderTimelineRow('education-edit-container', e));
+      }
+    }
+
+    if (expContainer) {
+      expContainer.innerHTML = '';
+      if (profile.experience && profile.experience.length > 0) {
+        profile.experience.forEach(ex => renderTimelineRow('experience-edit-container', ex));
+      }
+    }
   } catch (err) {
     console.error('Error prefilling profile form:', err);
     showToast('Failed to load profile settings.', 'error');
@@ -935,6 +975,45 @@ function registerFormListeners() {
     const form = e.target;
     const formData = new FormData(form);
 
+    // Pack dynamic skills
+    const skills = [];
+    document.querySelectorAll('.skill-edit-row').forEach(row => {
+      const name = row.querySelector('.skill-name-val').value.trim();
+      const percentage = parseInt(row.querySelector('.skill-percent-val').value) || 0;
+      const icon = row.querySelector('.skill-icon-val').value.trim();
+      const color = row.querySelector('.skill-color-val').value;
+      if (name) {
+        skills.push({ name, percentage, icon, color });
+      }
+    });
+    formData.set('skills', JSON.stringify(skills));
+
+    // Pack dynamic education
+    const education = [];
+    document.querySelectorAll('#education-edit-container .timeline-edit-row').forEach(row => {
+      const year = row.querySelector('.item-year-val').value.trim();
+      const title = row.querySelector('.item-title-val').value.trim();
+      const subtitle = row.querySelector('.item-subtitle-val').value.trim();
+      const description = row.querySelector('.item-desc-val').value.trim();
+      if (year && title) {
+        education.push({ year, title, subtitle, description });
+      }
+    });
+    formData.set('education', JSON.stringify(education));
+
+    // Pack dynamic experience
+    const experience = [];
+    document.querySelectorAll('#experience-edit-container .timeline-edit-row').forEach(row => {
+      const year = row.querySelector('.item-year-val').value.trim();
+      const title = row.querySelector('.item-title-val').value.trim();
+      const subtitle = row.querySelector('.item-subtitle-val').value.trim();
+      const description = row.querySelector('.item-desc-val').value.trim();
+      if (year && title) {
+        experience.push({ year, title, subtitle, description });
+      }
+    });
+    formData.set('experience', JSON.stringify(experience));
+
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
@@ -1045,3 +1124,77 @@ window.deleteResource = async function(type, id) {
     showToast(`Error deleting resource.`, 'error');
   }
 };
+
+// Helper to render a Skill row in settings panel
+function renderSkillRow(skill = {}) {
+  const container = document.getElementById('skills-edit-container');
+  if (!container) return;
+
+  const name = skill.name || '';
+  const percentage = skill.percentage !== undefined ? skill.percentage : 80;
+  const icon = skill.icon || 'fab fa-html5';
+  const color = skill.color || '#2563EB';
+
+  const html = `
+    <div class="skill-edit-row" style="display:grid; grid-template-columns: 1.5fr 1fr 1.5fr 1fr auto; gap:12px; margin-bottom:12px; align-items:end;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label" style="font-size:12px;">Skill Name</label>
+        <input type="text" class="form-control skill-name-val" value="${name}" placeholder="e.g. HTML5" required>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label" style="font-size:12px;">Percentage</label>
+        <input type="number" class="form-control skill-percent-val" min="0" max="100" value="${percentage}" placeholder="e.g. 90" required>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label" style="font-size:12px;">Icon Class</label>
+        <input type="text" class="form-control skill-icon-val" value="${icon}" placeholder="e.g. fab fa-html5" required>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label" style="font-size:12px;">Color (Hex)</label>
+        <input type="color" class="form-control skill-color-val" style="padding:4px; height:48px;" value="${color}">
+      </div>
+      <button type="button" class="btn btn-danger btn-sm remove-field-btn" style="height:48px; width:48px; display:flex; align-items:center; justify-content:center; padding:0;">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    </div>
+  `;
+  container.insertAdjacentHTML('beforeend', html);
+}
+
+// Helper to render a Timeline row (Education or Experience) in settings panel
+function renderTimelineRow(containerId, item = {}) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const year = item.year || '';
+  const title = item.title || '';
+  const subtitle = item.subtitle || '';
+  const description = item.description || '';
+
+  const html = `
+    <div class="timeline-edit-row" style="border:1px solid var(--border-color); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px; position:relative; background:var(--bg-primary);">
+      <button type="button" class="btn btn-danger btn-sm remove-field-btn" style="position:absolute; top:12px; right:12px; height:36px; width:36px; padding:0; display:flex; align-items:center; justify-content:center;">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      <div style="display:grid; grid-template-columns: 1fr 1.5fr 1.5fr; gap:16px; margin-bottom:12px; margin-top:20px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" style="font-size:12px;">Years</label>
+          <input type="text" class="form-control item-year-val" value="${year}" placeholder="e.g. 2020 - 2024" required>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" style="font-size:12px;">Title / Degree / Role</label>
+          <input type="text" class="form-control item-title-val" value="${title}" placeholder="e.g. BCA Degree" required>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" style="font-size:12px;">Subtitle / School / Company</label>
+          <input type="text" class="form-control item-subtitle-val" value="${subtitle}" placeholder="e.g. State University" required>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label" style="font-size:12px;">Description</label>
+        <textarea class="form-control item-desc-val" style="min-height:60px;" placeholder="Explain timeline details..." required>${description}</textarea>
+      </div>
+    </div>
+  `;
+  container.insertAdjacentHTML('beforeend', html);
+}

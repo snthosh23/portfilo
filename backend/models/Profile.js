@@ -40,6 +40,33 @@ const ProfileSchema = new mongoose.Schema({
   visitorsCount: {
     type: Number,
     default: 0
+  },
+  skills: {
+    type: [{
+      name: String,
+      percentage: Number,
+      icon: String,
+      color: String
+    }],
+    default: []
+  },
+  education: {
+    type: [{
+      year: String,
+      title: String,
+      subtitle: String,
+      description: String
+    }],
+    default: []
+  },
+  experience: {
+    type: [{
+      year: String,
+      title: String,
+      subtitle: String,
+      description: String
+    }],
+    default: []
   }
 }, { timestamps: true });
 
